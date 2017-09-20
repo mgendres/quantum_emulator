@@ -11,13 +11,6 @@
 #define N_QBITS 3
 #define N_RANGE (1<<N_QBITS)
 
-#define SWAP_TYPE(type, a, b) { \
-  type __swap_temp; \
-  __swap_temp = (b); \
-  (b) = (a); \
-  (a) = __swap_temp; \
-}
-
 #define PI 3.14159265359
 
 void q_printf(unsigned int);
@@ -35,11 +28,11 @@ void qstate_print(double complex *);
 
 void qstate_pure(unsigned int, double complex *);
 
-
-
 void qop_hadamard(unsigned int, double complex *);
 
 void qop_cxor(unsigned int, unsigned int, double complex *);
+
+void qop_swap(unsigned int, unsigned int, double complex *);
 
 void qop_rotation(unsigned int, unsigned int, unsigned int, double complex *);
 

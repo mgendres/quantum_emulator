@@ -73,21 +73,30 @@ void qop_hadamard(unsigned int i, double complex *z) {
   }
 }
 
-/*
+
 void qop_cxor(unsigned int i, unsigned int j, double complex *z) {
   // Perform CXOR operation, treating the i-th qubit as the control bit
+  // and j-th qubit as the target bit
   unsigned int ctrl = (1<<i);
   unsigned int targ = (1<<j);
+  double complex tmp;
   for (unsigned int k=0; k<N_RANGE; ++k) {
     if (k & ctrl) { // Check control
       if (k & targ) { // Avoid double swap
-        SWAP_TYPE(double complex, z[k], z[k^targ])
+        tmp = z[k];
+        z[k] = z[k^targ];
+        z[k^targ] = tmp;
       }
     }
   }
 }
 
-*/
+void qop_swap(unsigned int i, unsigned int j, double complex *z) {
+  qop_cxor(i,j,z);
+  qop_cxor(j,i,z);
+  qop_cxor(i,j,z);
+}
+
 
 void qop_rotation(unsigned int i, unsigned int j, unsigned int k, double complex *z) {
   // Perform rotation gate operation R_k
@@ -118,5 +127,9 @@ void qop_qft(double complex *z) {
       //printf("R ctrl=%u targ=%u angl=%u\n", i-1, j-1, k);
       k++;
     }
+  }
+  // Bit reversal using swap gates
+  for (unsigned int i=0; i<N_QBITS/2; ++i) {
+    qop_swap(i,N_QBITS-i-1,z);
   }
 }
