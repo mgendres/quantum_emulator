@@ -156,7 +156,7 @@ void qop_rotation(q_reg i, q_reg j, q_reg k, int sgn,  struct q_state z) {
 // An implementation of the quantum Fourier transform
 void qop_qft(struct q_state z, int sgn) {
   q_reg k;
-  for (q_reg i=z.length; i>0; --i) {
+  for (q_reg i=z.qubits; i>0; --i) {
     qop_hadamard(i-1, z);
     k=2;
     for (q_reg j=i-1; j>0; --j) {
@@ -170,3 +170,12 @@ void qop_qft(struct q_state z, int sgn) {
     qop_swap(i,z.qubits-i-1,z);
   }
 }
+
+// Applies operator O == \sum_x (-1)^f(x) |x><x| to a state,
+// where f(x) = +/- 1
+void qop_oracle(int (* func)(q_reg), struct q_state z) {
+  for (q_reg i=0; i<z.length; ++i) {
+    z.comp[i] *= func(i);
+  }
+}
+

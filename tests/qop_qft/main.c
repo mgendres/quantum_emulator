@@ -4,7 +4,7 @@ int main() {
 
   //srand(time(NULL));
 
-  struct q_state z = qstate_create(4);
+  struct q_state z = qstate_create(8);
  
   qstate_random(z);
   qstate_print(z);

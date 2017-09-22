@@ -49,4 +49,6 @@ void qop_rotation(q_reg, q_reg, q_reg, int, struct q_state);
 
 void qop_qft(struct q_state, int);
 
+void qop_oracle(int (*)(q_reg), struct q_state);
+
 #endif /* QUANTUM_EMULATOR_H */
