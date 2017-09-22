@@ -85,7 +85,8 @@ void qstate_pure(q_reg n, struct q_state z) {
 
 void qstate_print(struct q_state z) {
   for (q_reg n=0; n<z.length; ++n) {
-    printf("%u : (%f)+I*(%f)\n", n, creal(z.comp[n]), cimag(z.comp[n]));
+    //printf("%u : (%f)+I*(%f)\n", n, creal(z.comp[n]), cimag(z.comp[n]));
+    printf("(%f)+I*(%f),\n", creal(z.comp[n]), cimag(z.comp[n]));
   }
   printf("qubits : %u\n", z.qubits);
   printf("length :%u\n", z.length);
@@ -133,13 +134,15 @@ void qop_swap(q_reg i, q_reg j, struct q_state z) {
 }
 
 
-void qop_rotation(q_reg i, q_reg j, q_reg k, struct q_state z) {
+void qop_rotation(q_reg i, q_reg j, q_reg k, int sgn,  struct q_state z) {
   // Perform rotation gate operation R_k
   // treating the i-th qubit as the control bit
   // and the jth bit as the target bit
   q_reg ctrl = (1<<i);
   q_reg targ = (1<<j);
-  double complex w = cexp(-2.0*PI*I/(1<<k));
+  double phase = -sgn*2.0*PI;
+  phase /= (1<<k);
+  double complex w = cexp(phase*I);
   //printf("%f %f\n",creal(w), cimag(w));
   for (q_reg l=0; l<z.length; ++l) {
     if (l & ctrl) { // Check control
@@ -151,14 +154,14 @@ void qop_rotation(q_reg i, q_reg j, q_reg k, struct q_state z) {
 }
 
 // An implementation of the quantum Fourier transform
-void qop_qft(struct q_state z) {
+void qop_qft(struct q_state z, int sgn) {
   q_reg k;
   for (q_reg i=z.length; i>0; --i) {
     qop_hadamard(i-1, z);
     //printf("H: targ=%u\n", i-1);
     k=2;
     for (q_reg j=i-1; j>0; --j) {
-      qop_rotation(j-1, i-1, k, z);
+      qop_rotation(j-1, i-1, k, sgn, z);
       //printf("R ctrl=%u targ=%u angl=%u\n", i-1, j-1, k);
       k++;
     }

@@ -12,7 +12,7 @@ typedef unsigned int q_reg;
 //#define N_QBITS 3
 //#define N_RANGE (1<<N_QBITS)
 
-#define PI 3.14159265359
+#define PI 3.141592653589793
 
 struct q_state {
   double complex *comp;
@@ -46,9 +46,9 @@ void qop_cxor(q_reg, q_reg, struct q_state);
 
 void qop_swap(q_reg, q_reg, struct q_state);
 
-void qop_rotation(q_reg, q_reg, q_reg, struct q_state);
+void qop_rotation(q_reg, q_reg, q_reg, int, struct q_state);
 
-void qop_qft(struct q_state);
+void qop_qft(struct q_state, int);
  
 
 #endif /* QUANTUM_EMULATOR_H */
