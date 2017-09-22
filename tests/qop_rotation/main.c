@@ -4,18 +4,19 @@ int main() {
 
   srand(time(NULL));
 
-  double complex z[N_RANGE];
-  double complex w[N_RANGE];
+  unsigned int qubits = 3;
+  struct q_state z = qstate_create(qubits);
+  struct q_state w = qstate_create(qubits);
 
   double complex inner;
   
-  for (unsigned int c=0; c<N_QBITS; ++c) {
-    for (unsigned int t=0; t<N_QBITS; ++t) {
+  for (unsigned int c=0; c<qubits; ++c) {
+    for (unsigned int t=0; t<qubits; ++t) {
       if (c!=t) {
         printf("rotation_1 (ctrl=%u, targ=%u):\n", c, t);
-        for (unsigned int i=0; i<N_RANGE; ++i) {
+        for (unsigned int i=0; i<z.length; ++i) {
           qstate_pure(i,z);
-          for (unsigned int j=0; j<N_RANGE; ++j) {
+          for (unsigned int j=0; j<w.length; ++j) {
             qstate_pure(j,w);
             qop_rotation(c, t, 1, w);
             inner = qstate_inner(z,w);
@@ -28,5 +29,7 @@ int main() {
     }
   }
 
+  qstate_destroy(z);
+  qstate_destroy(w);
 
 }

@@ -4,15 +4,20 @@ int main() {
 
   srand(time(NULL));
 
-  double complex z[N_RANGE];
+  struct q_state z = qstate_create(3);
+
   qstate_random(z);
   qstate_print(z);
-  printf("%f\n", qstate_norm(z));
 
   qstate_pure(0,z);
   qstate_print(z);
-  printf("%f\n", qstate_norm(z));
 
+  qstate_pure(7,z);
+  qstate_print(z);
 
+  qstate_pure(8,z);
+  qstate_print(z);
+
+  qstate_destroy(z);
 
 }
