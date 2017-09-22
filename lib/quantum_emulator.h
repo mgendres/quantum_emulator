@@ -9,9 +9,6 @@
 
 typedef unsigned int q_reg;
 
-//#define N_QBITS 3
-//#define N_RANGE (1<<N_QBITS)
-
 #define PI 3.141592653589793
 
 struct q_state {
@@ -19,6 +16,8 @@ struct q_state {
   q_reg qubits; // The number of qubits used to represent the state
   q_reg length; // The number of comples numbers needed to represent the state = 2^qubits
 };
+
+int valid_qubit(q_reg);
 
 struct q_state qstate_create(q_reg);
 
@@ -49,6 +48,5 @@ void qop_swap(q_reg, q_reg, struct q_state);
 void qop_rotation(q_reg, q_reg, q_reg, int, struct q_state);
 
 void qop_qft(struct q_state, int);
- 
 
 #endif /* QUANTUM_EMULATOR_H */

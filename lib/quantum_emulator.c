@@ -1,14 +1,18 @@
 #include "quantum_emulator.h"
 
+int valid_qubit(q_reg i) {
+  return (i < 8*sizeof(q_reg));
+}
+
 /* Helper function to create a q_state */
-struct q_state qstate_create(q_reg qubits) {
-  if ( qubits >= 8*sizeof(q_reg) ) {
+struct q_state qstate_create(q_reg n) {
+  if ( !valid_qubit(n) ) {
     printf("Use fewer qubits or change the data type of q_reg to accomodate more qubits!\n");
     exit(0);
   }
   struct q_state z;
-  z.qubits = qubits;
-  z.length = (1<<qubits);
+  z.qubits = n;
+  z.length = (1<<n);
   z.comp = (complex double *) malloc(z.length * sizeof(complex double));
   return z;
 }
@@ -52,7 +56,6 @@ void qstate_normalize(struct q_state z) {
 double complex qstate_inner(struct q_state z, struct q_state w) {
   if ( z.length != w.length ) {
     printf("Cannot compute inner product.\n");
-    qstate_destroy(z);
     exit(0);
   }
   double complex inner = 0;
@@ -74,7 +77,6 @@ void qstate_random(struct q_state z) {
 void qstate_pure(q_reg n, struct q_state z) {
   if ( n >= z.length) {
     printf("Cannot initialize pure state.\n");
-    qstate_destroy(z);
     exit(0);
   }
   for (q_reg i=0; i<z.length; ++i) {
@@ -110,9 +112,9 @@ void qop_hadamard(q_reg i, struct q_state z) {
 }
 
 
+// Perform CXOR operation, treating the i-th qubit as the control bit
+// and j-th qubit as the target bit
 void qop_cxor(q_reg i, q_reg j, struct q_state z) {
-  // Perform CXOR operation, treating the i-th qubit as the control bit
-  // and j-th qubit as the target bit
   q_reg ctrl = (1<<i);
   q_reg targ = (1<<j);
   double complex tmp;
@@ -133,19 +135,17 @@ void qop_swap(q_reg i, q_reg j, struct q_state z) {
   qop_cxor(i,j,z);
 }
 
-
+// Controlled rotation gate operation R_k
+// treating the i-th qubit as the control bit
+// and the jth bit as the target bit
 void qop_rotation(q_reg i, q_reg j, q_reg k, int sgn,  struct q_state z) {
-  // Perform rotation gate operation R_k
-  // treating the i-th qubit as the control bit
-  // and the jth bit as the target bit
   q_reg ctrl = (1<<i);
   q_reg targ = (1<<j);
   double phase = -sgn*2.0*PI;
   phase /= (1<<k);
   double complex w = cexp(phase*I);
-  //printf("%f %f\n",creal(w), cimag(w));
   for (q_reg l=0; l<z.length; ++l) {
-    if (l & ctrl) { // Check control
+    if (l & ctrl) {
       if (l & targ) {
         z.comp[l] *= w;
       }
@@ -158,15 +158,14 @@ void qop_qft(struct q_state z, int sgn) {
   q_reg k;
   for (q_reg i=z.length; i>0; --i) {
     qop_hadamard(i-1, z);
-    //printf("H: targ=%u\n", i-1);
     k=2;
     for (q_reg j=i-1; j>0; --j) {
       qop_rotation(j-1, i-1, k, sgn, z);
-      //printf("R ctrl=%u targ=%u angl=%u\n", i-1, j-1, k);
       k++;
     }
   }
   // Bit reversal using swap gates
+  // (a lookup table would be more efficient)
   for (q_reg i=0; i<z.qubits/2; ++i) {
     qop_swap(i,z.qubits-i-1,z);
   }
