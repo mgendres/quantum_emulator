@@ -172,10 +172,41 @@ void qop_qft(struct q_state z, int sgn) {
 }
 
 // Applies operator O == \sum_x (-1)^f(x) |x><x| to a state,
-// where f(x) = +/- 1
+// where f(x) \in {0,1}
+// Note (-1)^f(x) = 1-2*f(x)
 void qop_oracle(int (* func)(q_reg), struct q_state z) {
   for (q_reg i=0; i<z.length; ++i) {
-    z.comp[i] *= func(i);
+    z.comp[i] *= (1.0-2.0*func(i));
   }
 }
 
+// Grover's diffusion operator;
+// should reimpement in terms of quantum gates if we
+// are to claim this is quantum emulation?
+void qop_diffusion(struct q_state z) {
+  complex double mu=0.0;
+  for (q_reg i=0; i<z.length; ++i) {
+    mu += z.comp[i];
+  }
+  mu /= z.length;
+  mu *= 2.0;
+  for (q_reg i=0; i<z.length; ++i) {
+    z.comp[i] *= -1;
+    z.comp[i] += mu;
+  }
+}
+
+// Grover's algorithm
+// Note, this implementation appears to be slightly unstable
+// if n_iter > \sqrt(z.length)... fortunately one need not
+// perform more than around that many iterations
+void qop_grover(int (* func)(q_reg), struct q_state z, q_reg n_iter) {
+  qstate_pure(0,z);
+  for (q_reg i=0; i< z.qubits; ++i) {
+    qop_hadamard(i,z);
+  }
+  for (q_reg i=0; i<n_iter; ++i) {
+    qop_oracle(func,z);
+    qop_diffusion(z);
+  }
+}

@@ -51,4 +51,8 @@ void qop_qft(struct q_state, int);
 
 void qop_oracle(int (*)(q_reg), struct q_state);
 
+void qop_diffusion(struct q_state);
+
+void qop_grover(int (*)(q_reg), struct q_state, q_reg);
+
 #endif /* QUANTUM_EMULATOR_H */
