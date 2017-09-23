@@ -23,6 +23,8 @@ struct q_state qstate_create(q_reg);
 
 void qstate_destroy(struct q_state);
 
+struct q_state qstate_clone(struct q_state);
+
 void q_printf(q_reg);
 
 double rng_uniform();

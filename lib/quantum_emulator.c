@@ -22,6 +22,19 @@ void qstate_destroy(struct q_state z) {
   free(z.comp);
 }
 
+/* Return a cloned known q_state */
+struct q_state qstate_clone(struct q_state z) {
+  struct q_state w;
+  w.qubits = z.qubits;
+  w.length = z.length;
+  w.comp = (complex double *) malloc(w.length * sizeof(complex double));
+  for (q_reg i=0; i<w.length; ++i) {
+    w.comp[i] = z.comp[i];
+  }
+  return w; 
+}
+
+
 /* This just prints out some bits; not really used for anything. */
 void q_printf(q_reg n) {
   q_reg mask = 1;
