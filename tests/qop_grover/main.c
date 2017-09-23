@@ -12,9 +12,10 @@ int f(q_reg x) {
 int main() {
 
   srand(time(NULL));
-
   struct q_state z = qstate_create(bits);
-  qop_grover(f,z,sqrt(bits));
+  double n_iter = PI/4.0;
+  n_iter *= sqrt(z.length);
+  qop_grover(f,z, (int) n_iter);
   qstate_print(z);
   qstate_destroy(z);
 

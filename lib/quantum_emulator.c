@@ -1,5 +1,11 @@
 #include "quantum_emulator.h"
 
+/*
+  Note to self: be better about naming conventions.
+  Want to make sure classical and quantum functions are indicated
+  as such...
+*/
+
 int valid_qubit(q_reg i) {
   return (i < 8*sizeof(q_reg));
 }
@@ -50,6 +56,26 @@ void q_printf(q_reg n) {
 // purposes (due to its potentially poor quality)
 double rng_uniform() {
   return rand()/ (double)RAND_MAX;
+}
+
+double qstate_min(struct q_state z) {
+  double min = cabs(z.comp[0]);
+  double prop;
+  for (q_reg n=1; n<z.length; ++n) {
+    prop = cabs(z.comp[n]);
+    if (min > prop) min=prop;
+  }
+  return min;
+}
+
+double qstate_max(struct q_state z) {
+  double max = cabs(z.comp[0]);
+  double prop;
+  for (q_reg n=1; n<z.length; ++n) {
+    prop = cabs(z.comp[n]);
+    if (max < prop) max=prop;
+  }
+  return max;
 }
 
 // Given a q_state, return its norm
@@ -218,8 +244,11 @@ void qop_grover(int (* func)(q_reg), struct q_state z, q_reg n_iter) {
   for (q_reg i=0; i< z.qubits; ++i) {
     qop_hadamard(i,z);
   }
+  printf("i = -1 min = %f max = %f\n", qstate_min(z), qstate_max(z));
   for (q_reg i=0; i<n_iter; ++i) {
     qop_oracle(func,z);
     qop_diffusion(z);
+    printf("i = %u min = %f max = %f\n", i, qstate_min(z), qstate_max(z));
   }
 }
+

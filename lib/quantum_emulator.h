@@ -29,6 +29,10 @@ void q_printf(q_reg);
 
 double rng_uniform();
 
+double qstate_min(struct q_state);
+
+double qstate_max(struct q_state);
+
 double qstate_norm(struct q_state);
 
 void qstate_normalize(struct q_state);
