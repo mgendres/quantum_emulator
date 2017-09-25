@@ -251,4 +251,3 @@ void qop_grover(int (* func)(q_reg), struct q_state z, q_reg n_iter) {
     printf("i = %u min = %f max = %f\n", i, qstate_min(z), qstate_max(z));
   }
 }
-
