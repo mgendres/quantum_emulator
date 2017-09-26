@@ -1,4 +1,5 @@
 #include "quantum_emulator.h"
+#include "utils.h"
 
 /*
   Note to self: be better about naming conventions.
@@ -151,9 +152,9 @@ void qop_hadamard(q_reg i, struct q_state z) {
 }
 
 
-// Perform CXOR operation, treating the i-th qubit as the control bit
+// Perform CNOT operation, treating the i-th qubit as the control bit
 // and j-th qubit as the target bit
-void qop_cxor(q_reg i, q_reg j, struct q_state z) {
+void qop_cnot(q_reg i, q_reg j, struct q_state z) {
   q_reg ctrl = (1<<i);
   q_reg targ = (1<<j);
   double complex tmp;
@@ -169,9 +170,9 @@ void qop_cxor(q_reg i, q_reg j, struct q_state z) {
 }
 
 void qop_swap(q_reg i, q_reg j, struct q_state z) {
-  qop_cxor(i,j,z);
-  qop_cxor(j,i,z);
-  qop_cxor(i,j,z);
+  qop_cnot(i,j,z);
+  qop_cnot(j,i,z);
+  qop_cnot(i,j,z);
 }
 
 // Controlled rotation gate operation R_k
@@ -251,3 +252,16 @@ void qop_grover(int (* func)(q_reg), struct q_state z, q_reg n_iter) {
     printf("i = %u min = %f max = %f\n", i, qstate_min(z), qstate_max(z));
   }
 }
+
+unsigned int qop_shor(q_reg n) {
+  if (n%2==0) return 2;
+  q_reg a = n*rng_uniform();
+  do{
+    a = n*rng_uniform();
+  } while (a==0);
+  q_reg b = gcd(a, n);
+  if(b!=1) return b;
+  // Perid findin, etc...
+  return 0;
+}
+

@@ -47,7 +47,7 @@ void qstate_pure(q_reg, struct q_state);
 
 void qop_hadamard(q_reg, struct q_state);
 
-void qop_cxor(q_reg, q_reg, struct q_state);
+void qop_cnot(q_reg, q_reg, struct q_state);
 
 void qop_swap(q_reg, q_reg, struct q_state);
 
@@ -60,5 +60,7 @@ void qop_oracle(int (*)(q_reg), struct q_state);
 void qop_diffusion(struct q_state);
 
 void qop_grover(int (*)(q_reg), struct q_state, q_reg);
+
+unsigned int qop_shor(q_reg);
 
 #endif /* QUANTUM_EMULATOR_H */

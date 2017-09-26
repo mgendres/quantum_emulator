@@ -13,12 +13,12 @@ int main() {
   for (unsigned int c=0; c<qubits; ++c) {
     for (unsigned int t=0; t<qubits; ++t) {
       if (c!=t) {
-        printf("cxor (ctrl=%u, targ=%u):\n", c, t);
+        printf("cnot (ctrl=%u, targ=%u):\n", c, t);
         for (unsigned int i=0; i<z.length; ++i) {
           qstate_pure(i,z);
           for (unsigned int j=0; j<w.length; ++j) {
             qstate_pure(j,w);
-            qop_cxor(c, t, w);
+            qop_cnot(c, t, w);
             inner = qstate_inner(z,w);
             printf("%f ", creal(inner));
           }
