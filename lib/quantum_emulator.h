@@ -27,8 +27,6 @@ struct q_state qstate_clone(struct q_state);
 
 void q_printf(q_reg);
 
-double rng_uniform();
-
 double qstate_min(struct q_state);
 
 double qstate_max(struct q_state);
@@ -44,6 +42,8 @@ void qstate_random(struct q_state);
 void qstate_print(struct q_state);
 
 void qstate_pure(q_reg, struct q_state);
+
+q_reg qstate_measure(struct q_state);
 
 void qop_hadamard(q_reg, struct q_state);
 

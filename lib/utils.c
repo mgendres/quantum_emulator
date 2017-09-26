@@ -1,5 +1,12 @@
 #include "utils.h"
 
+// Generate a random number in [0,1]
+// WARNING: this generator should only be used for testing
+// purposes (due to its potentially poor quality)
+double rng_uniform() {
+  return rand()/ (double)RAND_MAX;
+}
+
 int gcd(int a, int b) {
   if (a==0) return b;
   if (b==0) return a;

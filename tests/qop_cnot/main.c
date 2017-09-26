@@ -4,7 +4,7 @@ int main() {
 
   srand(time(NULL));
 
-  unsigned int qubits = 3;
+  unsigned int qubits = 2;
   struct q_state z = qstate_create(qubits);
   struct q_state w = qstate_create(qubits);
 

@@ -52,13 +52,6 @@ void q_printf(q_reg n) {
   printf("\n");
 }
 
-// Generate a random number in [0,1]
-// WARNING: this generator should only be used for testing
-// purposes (due to its potentially poor quality)
-double rng_uniform() {
-  return rand()/ (double)RAND_MAX;
-}
-
 double qstate_min(struct q_state z) {
   double min = cabs(z.comp[0]);
   double prop;
@@ -133,6 +126,26 @@ void qstate_print(struct q_state z) {
   printf("qubits : %u\n", z.qubits);
   printf("length :%u\n", z.length);
   printf("norm : %f\n", qstate_norm(z));
+}
+
+/*
+This function performs a measurements on a given q_state
+It returns a pure q_state (represented by a q_reg) with
+appropriate probability. This can probably be implemented in 
+a more efficient way, but this gets the job done.
+*/
+q_reg qstate_measure(struct q_state z) {
+  double p;
+  for (q_reg i=0; i<z.length-1; ++i) {
+    p = z.comp[i]*conj(z.comp[i]);
+    if (p>rng_uniform()) { return i; }
+    p = sqrt(1.0-p);
+    /* Renormalize */
+    for (q_reg j=i+1; j<z.length; ++j) {
+      z.comp[j] /= p;
+    }
+  }
+  return z.length-1;
 }
 
 // Perform hadamard operation on q-bit i

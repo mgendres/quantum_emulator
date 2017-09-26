@@ -17,6 +17,7 @@ int main() {
   n_iter *= sqrt(z.length);
   qop_grover(f,z, (int) n_iter);
   qstate_print(z);
+  printf("measured state: %u\n", qstate_measure(z));
   qstate_destroy(z);
 
 }

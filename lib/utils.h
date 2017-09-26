@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+double rng_uniform();
+
 int gcd(int, int);
 
 unsigned int is_prime(unsigned int n);
