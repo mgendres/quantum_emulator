@@ -153,7 +153,7 @@ void qop_hadamard(q_reg i, struct q_state z) {
   q_reg targ = (1<<i);
   double complex tmp;
   for (q_reg j=0; j<z.length; ++j) {
-    if (j & targ) { // Avoid double operations
+    if (j & targ) {
       tmp = z.comp[j^targ];
       z.comp[j^targ] += z.comp[j];
       z.comp[j^targ] /= sqrt(2.0);
@@ -164,6 +164,47 @@ void qop_hadamard(q_reg i, struct q_state z) {
   }
 }
 
+void qop_x(q_reg i, struct q_state z) {
+  q_reg targ = (1<<i);
+  double complex tmp;
+  for (q_reg j=0; j<z.length; ++j) {
+    if (j & targ) {
+       tmp = z.comp[j];
+       z.comp[j] = z.comp[j^targ];
+       z.comp[j^targ] = tmp;
+    }
+  }
+}
+
+void qop_y(q_reg i, struct q_state z) {
+  q_reg targ = (1<<i);
+  double complex tmp;
+  for (q_reg j=0; j<z.length; ++j) {
+    if (j & targ) {
+       tmp = z.comp[j];
+       z.comp[j] = I*z.comp[j^targ];
+       z.comp[j^targ] = (-1)*I*tmp;
+    }
+  }
+}
+
+void qop_z(q_reg i, struct q_state z) {
+  q_reg targ = (1<<i);
+  for (q_reg j=0; j<z.length; ++j) {
+    if (j & targ) {
+       z.comp[j] = (-1)*z.comp[j];
+    }
+  }
+}
+
+void qop_s(q_reg i, struct q_state z) {
+  q_reg targ = (1<<i);
+  for (q_reg j=0; j<z.length; ++j) {
+    if (j & targ) {
+       z.comp[j] = I*z.comp[j];
+    }
+  }
+}
 
 // Perform CNOT operation, treating the i-th qubit as the control bit
 // and j-th qubit as the target bit

@@ -17,15 +17,18 @@ struct q_state {
   q_reg length; // The number of comples numbers needed to represent the state = 2^qubits
 };
 
+
+void q_printf(q_reg);
+
 int valid_qubit(q_reg);
+
+/* qstate operations */
 
 struct q_state qstate_create(q_reg);
 
 void qstate_destroy(struct q_state);
 
 struct q_state qstate_clone(struct q_state);
-
-void q_printf(q_reg);
 
 double qstate_min(struct q_state);
 
@@ -45,7 +48,21 @@ void qstate_pure(q_reg, struct q_state);
 
 q_reg qstate_measure(struct q_state);
 
+/* One qubit ops */
+
 void qop_hadamard(q_reg, struct q_state);
+
+void qop_x(q_reg, struct q_state);
+
+void qop_y(q_reg, struct q_state);
+
+void qop_z(q_reg, struct q_state);
+
+void qop_s(q_reg, struct q_state);
+
+void qop_rotation(q_reg, q_reg, double phase, struct q_state);
+
+/* Two qubit ops */
 
 void qop_cnot(q_reg, q_reg, struct q_state);
 

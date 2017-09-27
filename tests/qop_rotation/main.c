@@ -18,7 +18,7 @@ int main() {
           qstate_pure(i,z);
           for (unsigned int j=0; j<w.length; ++j) {
             qstate_pure(j,w);
-            qop_rotation(c, t, 1, w);
+            qop_rotation(c, t, PI, w);
             inner = qstate_inner(z,w);
             printf("%f ", creal(inner));
           }
