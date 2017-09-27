@@ -188,15 +188,13 @@ void qop_swap(q_reg i, q_reg j, struct q_state z) {
   qop_cnot(i,j,z);
 }
 
-// Controlled rotation gate operation R_k
+// Controlled rotation gate operation R_\theta
 // treating the i-th qubit as the control bit
 // and the jth bit as the target bit
-void qop_rotation(q_reg i, q_reg j, q_reg k, int sgn,  struct q_state z) {
+void qop_rotation(q_reg i, q_reg j, double theta, struct q_state z) {
   q_reg ctrl = (1<<i);
   q_reg targ = (1<<j);
-  double phase = -sgn*2.0*PI;
-  phase /= (1<<k);
-  double complex w = cexp(phase*I);
+  double complex w = cexp(theta*I);
   for (q_reg l=0; l<z.length; ++l) {
     if (l & ctrl) {
       if (l & targ) {
@@ -209,11 +207,14 @@ void qop_rotation(q_reg i, q_reg j, q_reg k, int sgn,  struct q_state z) {
 // An implementation of the quantum Fourier transform
 void qop_qft(struct q_state z, int sgn) {
   q_reg k;
+  double phase;
   for (q_reg i=z.qubits; i>0; --i) {
     qop_hadamard(i-1, z);
     k=2;
     for (q_reg j=i-1; j>0; --j) {
-      qop_rotation(j-1, i-1, k, sgn, z);
+      phase = -sgn*2.0*PI;
+      phase /= (1<<k);
+      qop_rotation(j-1, i-1, phase, z);
       k++;
     }
   }

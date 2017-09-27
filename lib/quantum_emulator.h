@@ -51,7 +51,7 @@ void qop_cnot(q_reg, q_reg, struct q_state);
 
 void qop_swap(q_reg, q_reg, struct q_state);
 
-void qop_rotation(q_reg, q_reg, q_reg, int, struct q_state);
+void qop_rotation(q_reg, q_reg, double phase, struct q_state);
 
 void qop_qft(struct q_state, int);
 
