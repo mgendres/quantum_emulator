@@ -1,4 +1,4 @@
-#include "../../lib/quantum_emulator.h"
+#include "../../lib/quantum_simulator.h"
 
 int main() {
 

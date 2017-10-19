@@ -1,1 +1,1 @@
-# quantum_emulator
+# quantum_simulator

@@ -1,4 +1,4 @@
-#include "quantum_emulator.h"
+#include "quantum_simulator.h"
 #include "utils.h"
 
 /*

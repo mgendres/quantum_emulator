@@ -1,4 +1,4 @@
-#include "../../lib/quantum_emulator.h"
+#include "../../lib/quantum_simulator.h"
 
 /* This function is unknown, except throught the
 action fof the quantum oracle */

@@ -1,5 +1,5 @@
-#ifndef QUANTUM_EMULATOR_H 
-#define QUANTUM_EMULATOR_H
+#ifndef QUANTUM_SIMULATOR_H 
+#define QUANTUM_SIMULATOR_H
 
 #include <stdio.h>
 #include <complex.h>
